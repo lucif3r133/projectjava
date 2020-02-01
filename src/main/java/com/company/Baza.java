@@ -3,7 +3,7 @@ package com.company;
 import java.sql.*;
 
 public class Baza {
-
+    /* private int id = 1; */
     private Connection con;
 
     public Baza() {
@@ -72,7 +72,7 @@ public class Baza {
                     " NAME           TEXT    NOT NULL, " +
                     " AGE            INT     NOT NULL, " +
                     " BONUS            INT     NOT NULL, " +
-                    " ADDRESS        CHAR(50), " +
+                    " ADDRES        CHAR(50), " +
                     " SALARY         REAL)";
             stmt.executeUpdate(sql);
             stmt.close();
@@ -81,19 +81,22 @@ public class Baza {
         }
     }
 
-    public void addData(String tableName, int id, String name, String lastname, int age, String adress, int salary) {
+    public void dodajPracownika(String tableName, int id, String name, String lastname, int age, String adress, int salary) {
         Statement stmt = null;
         try {
             stmt = con.createStatement();
             String sql = "INSERT INTO " + tableName + " (ID,NAME,AGE,ADDRESS,SALARY) "
                     + "VALUES (" + id + ",'" + name + "'," + age + ", '" + adress + "', " + salary + " );";
             stmt.executeUpdate(sql);
+            id += 1;
             stmt.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
     }
+
+
 
     public void selectData(String table_name, String kolumna) {
         try {
@@ -130,17 +133,18 @@ public class Baza {
             String sql = "DELETE FROM " + table + " WHERE ID = " + id + "; ";
             stmt.executeUpdate(sql);
             stmt.close();
+            id -= 1;
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
-    public void akutalizujDane(String table, String whichdata, int id, String newdata) {
+    public void akutalizujDane(String table, String whichdata, int idprac, String newdata) {
         try {
             Statement stmt = con.createStatement();
             String sql = "UPDATE " + table +
                          " SET " + whichdata + "= '" + newdata
-                        + "' WHERE ID=" + id + ";" ;
+                        + "' WHERE ID=" + idprac + ";" ;
             stmt.executeUpdate(sql);
             stmt.close();
         } catch (SQLException e) {
@@ -148,6 +152,32 @@ public class Baza {
         }
     }
 
+    public void akutalizujDane(String table, String whichdata, int id, int newdata) {
+        try {
+            Statement stmt = con.createStatement();
+            String sql = "UPDATE " + table +
+                    " SET " + whichdata + "= " + newdata
+                    + " WHERE ID=" + id + ";" ;
+            stmt.executeUpdate(sql);
+            stmt.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    public void dajPremie(String table, int id, int newdata) {
+        try {
+            Statement stmt = con.createStatement();
+            String sql = "UPDATE " + table +
+                    " SET BONUS = " + newdata
+                    + " WHERE ID=" + id + ";" ;
+            stmt.executeUpdate(sql);
+            stmt.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
 }
 
